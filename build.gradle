@@ -6,8 +6,7 @@ plugins {
 group 'com.example'
 version '1.0-SNAPSHOT'
 
-def gatlingVersion = "3.7.5" // Обратите внимание, что версия может измениться, выберите актуальную версию
-
+def gatlingVersion = "3.7.5"
 def scalaVersion = "2.13.8"
 
 targetCompatibility = JavaVersion.VERSION_11
@@ -33,7 +32,7 @@ tasks.withType(JavaCompile) {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java'] // Указываем путь к исходникам Gatling
+            srcDirs = ['src/main/java']
         }
     }
 }

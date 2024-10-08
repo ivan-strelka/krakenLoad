@@ -1,12 +1,12 @@
 package org.example.util;
 
-import io.gatling.javaapi.core.*;
-
-import static io.gatling.javaapi.core.CoreDsl.*;
+import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.regex;
 import static io.gatling.javaapi.http.HttpDsl.ws;
 
-public class WsLoadHelper {
+import io.gatling.javaapi.core.ChainBuilder;
 
+public class WsLoadHelper {
 
   public static ChainBuilder connectWebSocket() {
     return exec(
