@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'groovy'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+def gatlingVersion = "3.7.5" // Обратите внимание, что версия может измениться, выберите актуальную версию
+
+def scalaVersion = "2.13.8"
+
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.codehaus.groovy:groovy-all:3.0.9"
+    implementation "io.gatling:gatling-core:$gatlingVersion"
+    implementation "io.gatling:gatling-app:$gatlingVersion"
+    implementation "io.gatling.highcharts:gatling-charts-highcharts:$gatlingVersion"
+    implementation "io.gatling:gatling-http:$gatlingVersion"
+    testImplementation "junit:junit:4.13.2"
+    implementation "org.scala-lang:scala-library:$scalaVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java'] // Указываем путь к исходникам Gatling
+        }
+    }
+}
+
+def gatlingReportDir = "$buildDir/reports/gatling"
+
+tasks.register('gatlingRunGetSessionToken', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Gatling performance tests"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.GetSessionTokenSimulation",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+
+tasks.register('gatlingRunPlayLoadSimulation', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.PlayLoadSimulation",  // Путь к классу симуляции
+            "-rf", "$buildDir/reports/gatling"
+    ]
+}
+

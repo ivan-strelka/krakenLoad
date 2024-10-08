@@ -1,0 +1,2 @@
+./gradlew gatlingRunPlayLoadSimulation
+./gradlew gatlingRunGetSessionToken
