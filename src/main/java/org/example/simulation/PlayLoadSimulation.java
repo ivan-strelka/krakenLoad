@@ -1,6 +1,5 @@
 package org.example.simulation;
 
-import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
 import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
@@ -22,7 +21,7 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 public class PlayLoadSimulation extends Simulation {
 
-  Integer user = 20;
+  Integer user = 50;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl("https://game.releasethekraken.io")
@@ -30,34 +29,34 @@ public class PlayLoadSimulation extends Simulation {
 
   ScenarioBuilder scn = scenario("Full game scenario")
       .exec(getAnonymousSessionToken())
-      .pause(10)
+      .pause(5)
       .exec(connectWebSocket())
-      .pause(10)
+      .pause(5)
       .exec(sendSendTapsRequest(5, 10))
-      .pause(10)
+      .pause(5)
       .exec(sendGetTopReferralsRequest(10))
-      .pause(10)
+      .pause(5)
       .exec(sendSubscribeRequest())
-      .pause(10)
+      .pause(5)
       .exec(sendGetTopUsersRequest(10))
-      .pause(10)
+      .pause(5)
       .exec(sendGetUserRequest())
-      .pause(10)
+      .pause(5)
       .exec(sendUpdateProfileRequest("Test", "1123"))
-      .pause(10)
+      .pause(5)
       .exec(sendGetUsersAroundRequest(10))
-      .pause(10)
+      .pause(5)
       .exec(closeWebSocket()
       );
 
   {
     setUp(
         scn.injectOpen(
-            rampUsers(user).during(20),
-            atOnceUsers(user),
-            constantUsersPerSec(user).during(150),
-            rampUsers(0).during(20)
+            rampUsers(user).during(20), // Плавное увеличение до заданного количества пользователей
+            constantUsersPerSec(user).during(150), // Держим нагрузку 2.5 минуты
+            rampUsers(0).during(20)              // Плавное снижение нагрузки
         )
     ).protocols(httpProtocol);
   }
+
 }
