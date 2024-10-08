@@ -22,7 +22,7 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 public class PlayLoadSimulation extends Simulation {
 
-  Integer user = 100;
+  Integer user = 20;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl("https://game.releasethekraken.io")
@@ -30,33 +30,33 @@ public class PlayLoadSimulation extends Simulation {
 
   ScenarioBuilder scn = scenario("Full game scenario")
       .exec(getAnonymousSessionToken())
-       .pause(5)
+      .pause(10)
       .exec(connectWebSocket())
-       .pause(5)
+      .pause(10)
       .exec(sendSendTapsRequest(5, 10))
-       .pause(5)
+      .pause(10)
       .exec(sendGetTopReferralsRequest(10))
-       .pause(5)
+      .pause(10)
       .exec(sendSubscribeRequest())
-       .pause(5)
+      .pause(10)
       .exec(sendGetTopUsersRequest(10))
-       .pause(5)
+      .pause(10)
       .exec(sendGetUserRequest())
-       .pause(5)
+      .pause(10)
       .exec(sendUpdateProfileRequest("Test", "1123"))
-       .pause(5)
+      .pause(10)
       .exec(sendGetUsersAroundRequest(10))
-       .pause(5)
+      .pause(10)
       .exec(closeWebSocket()
       );
 
   {
     setUp(
         scn.injectOpen(
-            rampUsers(user).during(10),
+            rampUsers(user).during(20),
             atOnceUsers(user),
-            constantUsersPerSec(user).during(60),
-            rampUsers(0).during(10)
+            constantUsersPerSec(user).during(150),
+            rampUsers(0).during(20)
         )
     ).protocols(httpProtocol);
   }

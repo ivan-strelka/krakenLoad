@@ -1,13 +1,19 @@
 package org.example.simulation;
 
-import io.gatling.javaapi.core.*;
-import io.gatling.javaapi.http.*;
+import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
+import static io.gatling.javaapi.core.CoreDsl.incrementUsersPerSec;
+import static io.gatling.javaapi.core.CoreDsl.rampUsers;
+import static io.gatling.javaapi.core.CoreDsl.scenario;
+import static io.gatling.javaapi.http.HttpDsl.http;
+import static org.example.util.HttpLoadHelper.getAnonymousSessionToken;
 
-import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.*;
-import static org.example.util.HttpLoadHelper.*;
+import io.gatling.javaapi.core.ScenarioBuilder;
+import io.gatling.javaapi.core.Simulation;
+import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 public class GetSessionTokenSimulation extends Simulation {
+
+  Integer user = 300;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl("https://game.releasethekraken.io")
@@ -17,12 +23,14 @@ public class GetSessionTokenSimulation extends Simulation {
       .exec(getAnonymousSessionToken());
 
   {
-//    setUp(scn.injectOpen(rampUsers(500).during(20),atOnceUsers(500), constantUsersPerSec(500).during(300))).protocols(httpProtocol);
     setUp(scn.injectOpen(
-        rampUsers(500).during(20),
-        constantUsersPerSec(500).during(200),
-        rampUsers(0).during(30))
-    ).protocols(httpProtocol);
+        incrementUsersPerSec(50)
+            .times(3)  // Каждые 2-3 минуты добавляем 50 пользователей, 3 раза
+            .eachLevelLasting(120),  // Каждое добавление длится 2 минуты
+        constantUsersPerSec(user).during(120), // Держим нагрузку 2 минуты
+        rampUsers(user).during(60), // Плавное увеличение нагрузки до максимума
+        rampUsers(0).during(60)  // Плавное снижение нагрузки до нуля
+    )).protocols(httpProtocol).maxDuration(600); // Общая максимальная длительность теста - 10 минут
   }
 
 }

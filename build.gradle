@@ -57,7 +57,7 @@ tasks.register('gatlingRunPlayLoadSimulation', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     args = [
             "-s", "org.example.simulation.PlayLoadSimulation",  // Путь к классу симуляции
-            "-rf", "$buildDir/reports/gatling"
+            "-rf", gatlingReportDir
     ]
 }
 
