@@ -46,13 +46,24 @@ sourceSets {
 
 def gatlingReportDir = "$buildDir/reports/gatling"
 
-tasks.register('gatlingRunGetSessionToken', JavaExec) {
+tasks.register('registarationSimulation', JavaExec) {
     group = "Gatling"
     description = "Runs the Gatling performance tests"
     mainClass = "io.gatling.app.Gatling"
     classpath = sourceSets.main.runtimeClasspath
     args = [
-            "-s", "org.example.simulation.GetSessionTokenSimulation",  // Путь к классу симуляции
+            "-s", "org.example.simulation.RegistrationSimulation",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+
+tasks.register('registarationCloseSimulation', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Gatling performance tests"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.RegistrationCloseSimulation",  // Путь к классу симуляции
             "-rf", gatlingReportDir
     ]
 }
@@ -75,6 +86,17 @@ tasks.register('playLoadSimulation', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     args = [
             "-s", "org.example.simulation.PlayLoadSimulation",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+
+tasks.register('newUserTap', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.NewUserTap",  // Путь к классу симуляции
             "-rf", gatlingReportDir
     ]
 }

@@ -19,7 +19,7 @@ import java.time.Duration;
 
 public class PlayLoadSimulation extends Simulation {
 
-  private final static Integer user = 1000;
+  private final static Integer user = 5000;
   private final static String wallet = "0x9bd8b7b527ca4e6738cbdabdf51c22466756073d";
 
   private final static String jwtToken = "${token}";
@@ -37,8 +37,8 @@ public class PlayLoadSimulation extends Simulation {
       .pause(1)
       .exec(sendGetUserRequest())
       .pause(3)
-      .repeat(2000).on( // Выполняем 2000 повторений
-          exec(sendSendTapsRequest(5, 10))
+      .repeat(500).on( // Выполняем 2000 повторений
+          exec(sendSendTapsRequest())
               .pause(Duration.ofMillis(200)) // Задержка между повторениями 200 мсек
       )
       .pause(5)
@@ -49,10 +49,10 @@ public class PlayLoadSimulation extends Simulation {
     setUp(
         scn.injectOpen(
             nothingFor(Duration.ofSeconds(2)),
-            rampUsers(user).during(250),
-            rampUsers(0).during(250)
+            rampUsers(user).during(150),
+            rampUsers(0).during(150)
         )
-    ).protocols(httpProtocol);
+    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(15));
   }
 
 //  {
@@ -81,7 +81,7 @@ public class PlayLoadSimulation extends Simulation {
 //      .pause(5)
 //      .exec(sendGetUserRequest())
 //      .pause(5)
-//      .exec(sendUpdateProfileRequest("Test", wallet))
+//      .exec(sendUpdateProfileRequest("unknow kraken", wallet))
 //      .pause(5)
 //      .exec(sendGetUsersAroundRequest(10))
 //      .pause(5)

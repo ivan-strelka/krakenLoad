@@ -19,7 +19,7 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
-public class RegistarationPlayLoadSimulation extends Simulation {
+public class RegistarationPlayLoadSimulation111 extends Simulation {
 
   Integer user = 150;
 
@@ -28,6 +28,7 @@ public class RegistarationPlayLoadSimulation extends Simulation {
       .acceptHeader("application/json");
 
   ScenarioBuilder scn = scenario("Full registration and game scenario")
+      .pause(2)
       .exec(getAnonymousSessionToken())
       .pause(5)
       .exec(connectWebSocket())
@@ -36,15 +37,16 @@ public class RegistarationPlayLoadSimulation extends Simulation {
       .pause(5)
       .exec(sendSubscribeRequest())
       .pause(5)
-      .exec(sendGetTopUsersRequest(10))
+      .exec(sendGetTopUsersRequest())
       .pause(5)
       .exec(sendGetUserRequest())
       .pause(5)
-      .exec(sendUpdateProfileRequest("Test", "0x9bd8b7b527ca4e6738cbdabdf51c22466756073d"))
+      .exec(
+          sendUpdateProfileRequest("unknown kraken", "0x9bd8b7b527ca4e6738cbdabdf51c22466756073d"))
       .pause(5)
       .exec(sendGetUsersAroundRequest(10))
       .pause(5)
-      .exec(sendSendTapsRequest(5, 10))
+      .exec(sendSendTapsRequest())
       .pause(5)
       .exec(closeWebSocket()
       );
