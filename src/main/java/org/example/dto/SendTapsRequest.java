@@ -22,4 +22,17 @@ public class SendTapsRequest {
 
   @JsonProperty("params")
   private List<SendTapsParams> params;
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class SendTapsParams {
+
+    @JsonProperty("x")
+    private int x;
+
+    @JsonProperty("y")
+    private int y;
+  }
+
 }

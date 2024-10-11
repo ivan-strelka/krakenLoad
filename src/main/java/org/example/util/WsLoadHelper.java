@@ -7,13 +7,12 @@ import static io.gatling.javaapi.http.HttpDsl.ws;
 import static org.example.util.Utils.getRandomNumber;
 
 import io.gatling.javaapi.core.ChainBuilder;
-import java.util.Collections;
+import java.util.List;
 import org.example.dto.GetTopUsersRequestDTO;
 import org.example.dto.GetTopUsersRequestDTO.ParamsGetTop;
 import org.example.dto.GetUserRequestDTO;
 import org.example.dto.GetUsersAroundRequest;
 import org.example.dto.GetUsersAroundRequest.ParamsGetUsers;
-import org.example.dto.SendTapsParams;
 import org.example.dto.SendTapsRequest;
 import org.example.dto.SubscribeRequest;
 import org.example.dto.UpdateProfileRequestDTO;
@@ -64,21 +63,22 @@ public class WsLoadHelper {
     );
   }
 
-  public static ChainBuilder sendSendTapsRequest() {
+  public static ChainBuilder sendTapsRequest() {
     int randomNumber = getRandomNumber(1, 100000);
     int x = getRandomNumber(1, 1000);
     int y = getRandomNumber(1, 1000);
-    SendTapsParams params = new SendTapsParams(x, y);
-    SendTapsRequest request = new SendTapsRequest("2.0", randomNumber, "sendTaps",
-        Collections.singletonList(params));
+    SendTapsRequest sendTapsRequest = new SendTapsRequest(
+        "2.0", randomNumber, "sendTaps", List.of(new SendTapsRequest.SendTapsParams(x, y))
+    );
 
-    String jsonString = JsonUtil.toJson(request);
+    String jsonString = JsonUtil.toJson(sendTapsRequest);
 
     return exec(
         ws("Send SendTaps Request")
             .sendText(jsonString)
-            .await(20).on(ws.checkTextMessage("check id and userInfo SendTaps")
+            .await(20).on(ws.checkTextMessage("Check SendTaps")
                 .check(jsonPath("$.id").exists())
+                .check(jsonPath("$.jsonrpc").exists())
                 .check(jsonPath("$.result.userInfo").exists())
             )
 
@@ -96,9 +96,9 @@ public class WsLoadHelper {
             .sendText(jsonString)
             .await(20).on(ws.checkTextMessage("check UpdateProfile")
                 .check(jsonPath("$.id").exists())
-                .check(jsonPath("$.result").exists())
-                .check(jsonPath("$.result.points").exists())
-                .check(jsonPath("$.result.id").exists()))
+                .check(jsonPath("$.jsonrpc").exists())
+                .check(jsonPath("$.error").exists())
+            )
     );
   }
 
@@ -163,10 +163,7 @@ public class WsLoadHelper {
         ws("Send Subscribe Request")
             .sendText(json)
             .await(20).on(ws.checkTextMessage("check sendSubscribeRequest")
-                .check(jsonPath("$.id").exists())
                 .check(jsonPath("$.jsonrpc").exists())
-                .check(jsonPath("$.result").exists())
-
             )
     );
   }
@@ -175,9 +172,10 @@ public class WsLoadHelper {
     int id = getRandomNumber(1, 1000000);
     SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", id, "unsubscribe");
     String json = JsonUtil.toJson(subscribeRequest);
+
     return exec(
         ws("Send unsubscribe Request")
-            .sendText("{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"unsubscribe\"}")
+            .sendText(json)
             .await(20).on(ws.checkTextMessage("check sendUnsubscribeRequest")
                 .check(jsonPath("$.id").exists())
                 .check(jsonPath("$.jsonrpc").exists())

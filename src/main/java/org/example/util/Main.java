@@ -1,15 +1,21 @@
 package org.example.util;
 
-import java.util.Collections;
-import org.example.dto.GetUserRequestDTO;
+import static org.example.util.Utils.getRandomNumber;
+
+import java.util.List;
+import org.example.dto.SendTapsRequest;
 
 public class Main {
 
   public static void main(String[] args) {
+    int randomNumber = getRandomNumber(1, 100000);
+    int x = getRandomNumber(1, 1000);
+    int y = getRandomNumber(1, 1000);
+    SendTapsRequest sendTapsRequest = new SendTapsRequest(
+        "2.0", randomNumber, "sendTaps", List.of(new SendTapsRequest.SendTapsParams(x, y))
+    );
 
-    GetUserRequestDTO request = new GetUserRequestDTO("2.0", 1, "getUser");
-    String test = JsonUtil.toJson(Collections.singletonList(request));
-
-    System.out.println(test);
+    String jsonString = JsonUtil.toJson(sendTapsRequest);
+    System.out.println(jsonString);
   }
 }

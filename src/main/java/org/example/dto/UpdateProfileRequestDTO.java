@@ -27,8 +27,8 @@ public class UpdateProfileRequestDTO {
   @AllArgsConstructor
   public static class Params {
 
-    @JsonProperty("nickName")
-    private String nickName;
+    @JsonProperty("nickname")
+    private String nickname;
 
     @JsonProperty("wallet")
     private String wallet;

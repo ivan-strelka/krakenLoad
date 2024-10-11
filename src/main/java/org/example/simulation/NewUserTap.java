@@ -11,7 +11,7 @@ import static org.example.util.HttpLoadHelper.getAnonymousSessionToken;
 import static org.example.util.WsLoadHelper.closeWebSocket;
 import static org.example.util.WsLoadHelper.connectWebSocket;
 import static org.example.util.WsLoadHelper.sendGetUserRequest;
-import static org.example.util.WsLoadHelper.sendSendTapsRequest;
+import static org.example.util.WsLoadHelper.sendTapsRequest;
 
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
@@ -34,7 +34,7 @@ public class NewUserTap extends Simulation {
       .pause(3)
       .exec(sendGetUserRequest())
       .repeat(2000).on( // Выполняем 2000 повторений
-          exec(sendSendTapsRequest())
+          exec(sendTapsRequest())
               .pause(Duration.ofMillis(200)) // Задержка между повторениями 200 мсек
       )
       .pause(3)
