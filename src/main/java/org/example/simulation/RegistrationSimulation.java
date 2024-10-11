@@ -4,6 +4,7 @@ import static io.gatling.javaapi.core.CoreDsl.nothingFor;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static org.example.constants.Constants.BASE_URL;
 import static org.example.util.HttpLoadHelper.getAnonymousSessionToken;
 import static org.example.util.WsLoadHelper.closeWebSocket;
 import static org.example.util.WsLoadHelper.connectWebSocket;
@@ -19,7 +20,7 @@ public class RegistrationSimulation extends Simulation {
   Integer user = 5000;
 
   HttpProtocolBuilder httpProtocol = http
-      .baseUrl("https://game.releasethekraken.io")
+      .baseUrl(BASE_URL)
       .acceptHeader("application/json");
 
   ScenarioBuilder scn = scenario("Full registration open scenario")

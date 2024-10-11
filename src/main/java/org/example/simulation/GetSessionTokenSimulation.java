@@ -5,6 +5,7 @@ import static io.gatling.javaapi.core.CoreDsl.incrementUsersPerSec;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static org.example.constants.Constants.BASE_URL;
 import static org.example.util.HttpLoadHelper.getAnonymousSessionToken;
 
 import io.gatling.javaapi.core.ScenarioBuilder;
@@ -16,7 +17,7 @@ public class GetSessionTokenSimulation extends Simulation {
   Integer user = 300;
 
   HttpProtocolBuilder httpProtocol = http
-      .baseUrl("https://game.releasethekraken.io")
+      .baseUrl(BASE_URL)
       .acceptHeader("application/json");
 
   ScenarioBuilder scn = scenario("Get Anonymous Session Token Simulation")

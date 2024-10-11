@@ -11,8 +11,11 @@ import java.util.Collections;
 import org.example.dto.GetTopUsersRequestDTO;
 import org.example.dto.GetTopUsersRequestDTO.ParamsGetTop;
 import org.example.dto.GetUserRequestDTO;
+import org.example.dto.GetUsersAroundRequest;
+import org.example.dto.GetUsersAroundRequest.ParamsGetUsers;
 import org.example.dto.SendTapsParams;
 import org.example.dto.SendTapsRequest;
+import org.example.dto.SubscribeRequest;
 import org.example.dto.UpdateProfileRequestDTO;
 import org.example.dto.UpdateProfileRequestDTO.Params;
 
@@ -60,7 +63,6 @@ public class WsLoadHelper {
             )
     );
   }
-
 
   public static ChainBuilder sendSendTapsRequest() {
     int randomNumber = getRandomNumber(1, 100000);
@@ -117,48 +119,70 @@ public class WsLoadHelper {
     );
   }
 
-  public static ChainBuilder sendGetUsersAroundRequest(int limit) {
-    int randomNumber = getRandomNumber(1, 1000000);
-
+  public static ChainBuilder sendGetUsersAroundRequest() {
+    int id = getRandomNumber(1, 1000000);
+    int limit = getRandomNumber(1, 20);
+    GetUsersAroundRequest request = new GetUsersAroundRequest("2.0", id, "getUsersAround",
+        new ParamsGetUsers(limit));
+    String json = JsonUtil.toJson(request);
     return exec(
         ws("Send getUsersAround Request")
-            .sendText(
-                "{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"getUsersAround\", \"params\": {\"limit\": "
-                    + limit + "}}")
-            .await(20).on(ws.checkTextMessage("check sendGetUsersAroundRequest").check(regex(".*")))
+            .sendText(json)
+            .await(20).on(ws.checkTextMessage("check sendGetUsersAroundRequest")
+                .check(jsonPath("$.id").exists())
+                .check(jsonPath("$.jsonrpc").exists())
+                .check(jsonPath("$.result").exists())
+            )
     );
   }
 
-  public static ChainBuilder sendGetTopReferralsRequest(int limit) {
-    int randomNumber = getRandomNumber(1, 1000000);
+  public static ChainBuilder sendGetTopReferralsRequest() {
+    int id = getRandomNumber(1, 1000000);
+    int limit = getRandomNumber(1, 20);
+    GetUsersAroundRequest request = new GetUsersAroundRequest("2.0", id, "getTopReferrals",
+        new ParamsGetUsers(limit));
 
+    String json = JsonUtil.toJson(request);
     return exec(
         ws("Send getTopReferrals Request")
-            .sendText(
-                "{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"getTopReferrals\", \"params\": {\"limit\": "
-                    + limit + "}}")
+            .sendText(json)
             .await(20)
-            .on(ws.checkTextMessage("check sendGetTopReferralsRequest").check(regex(".*")))
+            .on(ws.checkTextMessage("check sendGetTopReferralsRequest")
+                .check(regex(".*")).check(jsonPath("$.id").exists())
+                .check(jsonPath("$.jsonrpc").exists())
+                .check(jsonPath("$.result").exists())
+            )
     );
   }
 
   public static ChainBuilder sendSubscribeRequest() {
-    int randomNumber = getRandomNumber(1, 1000000);
-
+    int id = getRandomNumber(1, 1000000);
+    SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", id, "subscribe");
+    String json = JsonUtil.toJson(subscribeRequest);
     return exec(
         ws("Send Subscribe Request")
-            .sendText("{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"subscribe\"}")
-            .await(20).on(ws.checkTextMessage("check sendSubscribeRequest").check(regex(".*")))
+            .sendText(json)
+            .await(20).on(ws.checkTextMessage("check sendSubscribeRequest")
+                .check(jsonPath("$.id").exists())
+                .check(jsonPath("$.jsonrpc").exists())
+                .check(jsonPath("$.result").exists())
+
+            )
     );
   }
 
   public static ChainBuilder sendUnsubscribeRequest() {
-    int randomNumber = getRandomNumber(1, 1000000);
-
+    int id = getRandomNumber(1, 1000000);
+    SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", id, "unsubscribe");
+    String json = JsonUtil.toJson(subscribeRequest);
     return exec(
         ws("Send unsubscribe Request")
             .sendText("{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"unsubscribe\"}")
-            .await(20).on(ws.checkTextMessage("check sendUnsubscribeRequest").check(regex(".*")))
+            .await(20).on(ws.checkTextMessage("check sendUnsubscribeRequest")
+                .check(jsonPath("$.id").exists())
+                .check(jsonPath("$.jsonrpc").exists())
+                .check(jsonPath("$.result").exists())
+            )
     );
   }
 }

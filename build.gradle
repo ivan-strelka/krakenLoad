@@ -100,3 +100,14 @@ tasks.register('newUserTap', JavaExec) {
             "-rf", gatlingReportDir
     ]
 }
+
+tasks.register('registrationPlayLoadFullSimulation', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.RegistrationPlayLoadFullSimulation",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}

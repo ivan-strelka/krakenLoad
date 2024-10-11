@@ -4,6 +4,9 @@ import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static org.example.constants.Constants.BASE_URL;
+import static org.example.constants.Constants.USERNAME;
+import static org.example.constants.Constants.WALLET;
 import static org.example.util.HttpLoadHelper.getAnonymousSessionToken;
 import static org.example.util.WsLoadHelper.closeWebSocket;
 import static org.example.util.WsLoadHelper.connectWebSocket;
@@ -13,18 +16,19 @@ import static org.example.util.WsLoadHelper.sendGetUserRequest;
 import static org.example.util.WsLoadHelper.sendGetUsersAroundRequest;
 import static org.example.util.WsLoadHelper.sendSendTapsRequest;
 import static org.example.util.WsLoadHelper.sendSubscribeRequest;
+import static org.example.util.WsLoadHelper.sendUnsubscribeRequest;
 import static org.example.util.WsLoadHelper.sendUpdateProfileRequest;
 
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
-public class RegistarationPlayLoadSimulation111 extends Simulation {
+public class RegistrationPlayLoadFullSimulation extends Simulation {
 
-  Integer user = 150;
+  Integer user = 10;
 
   HttpProtocolBuilder httpProtocol = http
-      .baseUrl("https://game.releasethekraken.io")
+      .baseUrl(BASE_URL)
       .acceptHeader("application/json");
 
   ScenarioBuilder scn = scenario("Full registration and game scenario")
@@ -33,7 +37,7 @@ public class RegistarationPlayLoadSimulation111 extends Simulation {
       .pause(5)
       .exec(connectWebSocket())
       .pause(5)
-      .exec(sendGetTopReferralsRequest(10))
+      .exec(sendGetTopReferralsRequest())
       .pause(5)
       .exec(sendSubscribeRequest())
       .pause(5)
@@ -41,12 +45,13 @@ public class RegistarationPlayLoadSimulation111 extends Simulation {
       .pause(5)
       .exec(sendGetUserRequest())
       .pause(5)
-      .exec(
-          sendUpdateProfileRequest("unknown kraken", "0x9bd8b7b527ca4e6738cbdabdf51c22466756073d"))
+      .exec(sendUpdateProfileRequest(USERNAME, WALLET))
       .pause(5)
-      .exec(sendGetUsersAroundRequest(10))
+      .exec(sendGetUsersAroundRequest())
       .pause(5)
       .exec(sendSendTapsRequest())
+      .pause(5)
+      .exec(sendUnsubscribeRequest())
       .pause(5)
       .exec(closeWebSocket()
       );
@@ -54,9 +59,9 @@ public class RegistarationPlayLoadSimulation111 extends Simulation {
   {
     setUp(
         scn.injectOpen(
-            rampUsers(user).during(20), // Плавное увеличение до заданного количества пользователей
-            constantUsersPerSec(user).during(200), // Держим нагрузку 2.5 минуты
-            rampUsers(0).during(20)              // Плавное снижение нагрузки
+            rampUsers(user).during(10), // Плавное увеличение до заданного количества пользователей
+            constantUsersPerSec(user).during(2), // Держим нагрузку 2.5 минуты
+            rampUsers(0).during(10)              // Плавное снижение нагрузки
         )
     ).protocols(httpProtocol);
   }
