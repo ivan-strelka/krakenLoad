@@ -101,6 +101,18 @@ tasks.register('newUserTap', JavaExec) {
     ]
 }
 
+tasks.register('newUserTapClose', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.NewUserCloseTap",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+
+
 tasks.register('registrationPlayLoadFullSimulation', JavaExec) {
     group = "Gatling"
     description = "Runs the Complete Load Simulation"
@@ -108,6 +120,16 @@ tasks.register('registrationPlayLoadFullSimulation', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     args = [
             "-s", "org.example.simulation.RegistrationPlayLoadFullSimulation",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+tasks.register('onePlayLoadSimulation', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.OnePlayLoadSimulation",  // Путь к классу симуляции
             "-rf", gatlingReportDir
     ]
 }

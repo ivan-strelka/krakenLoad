@@ -20,7 +20,7 @@ import java.time.Duration;
 
 public class NewUserTap extends Simulation {
 
-  Integer user = 3000;
+  Integer user = 500;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl(BASE_URL)

@@ -45,8 +45,8 @@ public class WsLoadHelper {
   }
 
   public static ChainBuilder sendGetUserRequest() {
-    int randomNumber = getRandomNumber(1, 1000000);
-    GetUserRequestDTO request = new GetUserRequestDTO("2.0", randomNumber, "getUser");
+
+    GetUserRequestDTO request = new GetUserRequestDTO("2.0", 1, "getUser");
     String jsonString = JsonUtil.toJson(request);
 
     return exec(
@@ -64,11 +64,10 @@ public class WsLoadHelper {
   }
 
   public static ChainBuilder sendTapsRequest() {
-    int randomNumber = getRandomNumber(1, 100000);
     int x = getRandomNumber(1, 1000);
     int y = getRandomNumber(1, 1000);
     SendTapsRequest sendTapsRequest = new SendTapsRequest(
-        "2.0", randomNumber, "sendTaps", List.of(new SendTapsRequest.SendTapsParams(x, y))
+        "2.0", 1, "sendTaps", List.of(new SendTapsRequest.SendTapsParams(x, y))
     );
 
     String jsonString = JsonUtil.toJson(sendTapsRequest);
@@ -120,9 +119,8 @@ public class WsLoadHelper {
   }
 
   public static ChainBuilder sendGetUsersAroundRequest() {
-    int id = getRandomNumber(1, 1000000);
     int limit = getRandomNumber(1, 20);
-    GetUsersAroundRequest request = new GetUsersAroundRequest("2.0", id, "getUsersAround",
+    GetUsersAroundRequest request = new GetUsersAroundRequest("2.0", 1, "getUsersAround",
         new ParamsGetUsers(limit));
     String json = JsonUtil.toJson(request);
     return exec(
@@ -137,9 +135,8 @@ public class WsLoadHelper {
   }
 
   public static ChainBuilder sendGetTopReferralsRequest() {
-    int id = getRandomNumber(1, 1000000);
     int limit = getRandomNumber(1, 20);
-    GetUsersAroundRequest request = new GetUsersAroundRequest("2.0", id, "getTopReferrals",
+    GetUsersAroundRequest request = new GetUsersAroundRequest("2.0", 1, "getTopReferrals",
         new ParamsGetUsers(limit));
 
     String json = JsonUtil.toJson(request);
@@ -156,8 +153,7 @@ public class WsLoadHelper {
   }
 
   public static ChainBuilder sendSubscribeRequest() {
-    int id = getRandomNumber(1, 1000000);
-    SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", id, "subscribe");
+    SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", 1, "subscribe");
     String json = JsonUtil.toJson(subscribeRequest);
     return exec(
         ws("Send Subscribe Request")
@@ -169,8 +165,7 @@ public class WsLoadHelper {
   }
 
   public static ChainBuilder sendUnsubscribeRequest() {
-    int id = getRandomNumber(1, 1000000);
-    SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", id, "unsubscribe");
+    SubscribeRequest subscribeRequest = new SubscribeRequest("2.0", 1, "unsubscribe");
     String json = JsonUtil.toJson(subscribeRequest);
 
     return exec(

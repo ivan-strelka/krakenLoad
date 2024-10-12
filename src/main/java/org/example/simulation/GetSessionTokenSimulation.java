@@ -14,7 +14,7 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 public class GetSessionTokenSimulation extends Simulation {
 
-  Integer user = 300;
+  Integer user = 500;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl(BASE_URL)

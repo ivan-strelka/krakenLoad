@@ -19,7 +19,7 @@ import java.time.Duration;
 
 public class NewUserCloseTap extends Simulation {
 
-  Integer user = 3000;
+  Integer user = 10000;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl(BASE_URL)
@@ -45,9 +45,9 @@ public class NewUserCloseTap extends Simulation {
   {
     setUp(
         scn.injectClosed(
-            rampConcurrentUsers(1).to(user).during(500),
+            rampConcurrentUsers(1).to(user).during(200),
             constantConcurrentUsers(user).during(300),
-            rampConcurrentUsers(user).to(0).during(500)
+            rampConcurrentUsers(user).to(0).during(200)
         )
     ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(18));
 
