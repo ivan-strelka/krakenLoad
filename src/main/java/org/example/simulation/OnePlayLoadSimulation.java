@@ -19,9 +19,9 @@ import java.time.Duration;
 
 public class OnePlayLoadSimulation extends Simulation {
 
-  private final static Integer user = 80;
+  private final static Integer user = 100;
 
-  private final static String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImIzOTU4ZWI0LWE5ZjEtNDc5MC1iZDIzLWZjNmIxYjYyMjJmMSJ9.NXEtIE5oJZVb65VE6Rmobkkrpvj4WSW5QFACjJebixU";
+  private final static String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjZmZDg2ZjEwLTMxM2QtNGJiNC05MmVlLTViMTA4YjM2NDFlYiJ9.ofkl4RoTFiILFjEjHMeDiA_h0avus4j1uB7Z3bVMS3w";
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl(BASE_URL)
