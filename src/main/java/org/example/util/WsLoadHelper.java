@@ -4,6 +4,7 @@ import static io.gatling.javaapi.core.CoreDsl.exec;
 import static io.gatling.javaapi.core.CoreDsl.jsonPath;
 import static io.gatling.javaapi.core.CoreDsl.regex;
 import static io.gatling.javaapi.http.HttpDsl.ws;
+import static org.example.constants.Constants.BASE_URL_WS;
 import static org.example.util.Utils.getRandomNumber;
 
 import io.gatling.javaapi.core.ChainBuilder;
@@ -20,10 +21,12 @@ import org.example.dto.UpdateProfileRequestDTO.Params;
 
 public class WsLoadHelper {
 
+  private final static String url = BASE_URL_WS + "/backend/ws?jwt=#{jwtToken}";
+
   public static ChainBuilder connectWebSocket() {
     return exec(
         ws("Connect to WebSocket")
-            .connect("wss://game.releasethekraken.io/backend/ws?jwt=#{jwtToken}")
+            .connect(url)
             .onConnected(exec(
                 session -> session.set("connected", true)
             ))
@@ -33,7 +36,7 @@ public class WsLoadHelper {
   public static ChainBuilder connectWebSocket(String jwtToken) {
     return exec(
         ws("Connect to WebSocket")
-            .connect("wss://game.releasethekraken.io/backend/ws?jwt=" + jwtToken)
+            .connect(url)
             .onConnected(exec(
                 session -> session.set("connected", true)
             ))
