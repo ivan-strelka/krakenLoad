@@ -2,7 +2,6 @@ package org.example.simulation.load;
 
 import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 import static io.gatling.javaapi.core.CoreDsl.exec;
-import static io.gatling.javaapi.core.CoreDsl.nothingFor;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
@@ -21,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LoadUserOpenTap extends Simulation {
 
-  Integer maxUsers = 3000;
+  Integer maxUsers = 4000;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl(BASE_URL)
@@ -59,21 +58,23 @@ public class LoadUserOpenTap extends Simulation {
   {
     setUp(
         scn.injectOpen(
-            nothingFor(Duration.ofSeconds(2)),
             rampUsers(maxUsers).during(Duration.ofMinutes(2)),
-            constantUsersPerSec(2).during(Duration.ofMinutes(3)),
-            rampUsers(0).during(Duration.ofMinutes(2))
+            constantUsersPerSec(2).during(Duration.ofMinutes(3))   // Стабильная нагрузка
         )
-    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(7));
+    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(5));
   }
 
 //  {
 //    setUp(
 //        scn.injectOpen(
-//            rampUsersPerSec(0).to(maxUsers).during(Duration.ofMinutes(30))
+//            nothingFor(Duration.ofSeconds(2)),
+//            rampUsers(maxUsers).during(Duration.ofMinutes(2)),
+//            constantUsersPerSec(5).during(Duration.ofMinutes(3)),
+//            rampUsers(0).during(Duration.ofMinutes(2))
 //        )
-//    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(30));
-//
+//    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(7));
 //  }
+//
+
 
 }

@@ -1,6 +1,5 @@
 package org.example.simulation.load;
 
-import static io.gatling.javaapi.core.CoreDsl.constantConcurrentUsers;
 import static io.gatling.javaapi.core.CoreDsl.exec;
 import static io.gatling.javaapi.core.CoreDsl.rampConcurrentUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
@@ -20,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LoadUserCloseTap extends Simulation {
 
-  Integer maxUsers = 5000;
+  Integer maxUsers = 10000;
 
   HttpProtocolBuilder httpProtocol = http
       .baseUrl(BASE_URL)
@@ -58,22 +57,11 @@ public class LoadUserCloseTap extends Simulation {
   {
     setUp(
         scn.injectClosed(
-            rampConcurrentUsers(1).to(maxUsers).during(Duration.ofMinutes(1)),
-            constantConcurrentUsers(maxUsers).during(Duration.ofMinutes(3)),
-            rampConcurrentUsers(maxUsers).to(0).during(Duration.ofMinutes(1))
+            rampConcurrentUsers(1).to(maxUsers).during(Duration.ofMinutes(120))
+//            constantConcurrentUsers(maxUsers).during(Duration.ofMinutes(130))
+//            rampConcurrentUsers(maxUsers).to(0).during(Duration.ofMinutes(10))
         )
-    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(5));
+    ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(120));
 
   }
-
-//  setUp(
-//      scn.injectClosed(
-//      rampConcurrentUsers(1).to(maxUsers).during(Duration.ofMinutes(10)),
-//  constantConcurrentUsers(maxUsers).during(Duration.ofMinutes(40)),
-//  rampConcurrentUsers(maxUsers).to(1).during(Duration.ofMinutes(10))
-//      )
-//      ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(60));
-//
-//}
-//
 }
