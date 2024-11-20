@@ -30,6 +30,13 @@ dependencies {
 
     testImplementation "junit:junit:4.13.2"
     implementation "org.scala-lang:scala-library:$scalaVersion"
+
+    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.9'
+
+    implementation 'io.rest-assured:rest-assured:4.4.0'
+
+
 }
 
 tasks.withType(JavaCompile) {
@@ -174,6 +181,37 @@ tasks.register('loadUserOpenTap', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     args = [
             "-s", "org.example.simulation.load.LoadUserOpenTap",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+
+tasks.register('getTokenLoad', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.load.GetTokenLoad",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+tasks.register('getTokenLoadOpen', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.load.GetTokenLoadOpen",  // Путь к классу симуляции
+            "-rf", gatlingReportDir
+    ]
+}
+tasks.register('playLoadCloseFeed', JavaExec) {
+    group = "Gatling"
+    description = "Runs the Complete Load Simulation"
+    mainClass = "io.gatling.app.Gatling"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "-s", "org.example.simulation.load.PlayLoadCloseFeed",  // Путь к классу симуляции
             "-rf", gatlingReportDir
     ]
 }
